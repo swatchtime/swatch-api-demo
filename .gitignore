@@ -1,0 +1,9 @@
+# Node/npm
+node_modules/
+
+# Python caches
+__pycache__/
+
+# local dev
+.DS_Store
+.env
