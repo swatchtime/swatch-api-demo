@@ -42,7 +42,6 @@
 
               <div class="my-4">
                 <label class="form-label">Available Fields <small>(select any)</small></label>
-                <div class="form-text mb-2">Note: <code>time24</code>/<code>time12</code>/<code>ampm</code>/<code>date</code> are BMT (UTC+1, fixed, no DST). Use <code>timestamp</code> for UTC.</div>
                 <div class="mt-2 d-flex flex-wrap gap-2" id="fields-checkboxes">
                   <label class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" value="swatch" />
@@ -74,26 +73,30 @@
                   </label>
                   <label class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" value="timestamp" />
-                    <span class="form-check-label">timestamp</span>
+                    <span class="form-check-label">timestamp</span> <small class="text-muted">(UTC ISO)</small>
                   </label>
                 </div>
+                <div class="form-text my-4">Note: <code>time24</code>/<code>time12</code>/<code>ampm</code>/<code>date</code> return Biel Mean Time (BMT) values. This is UTC+1 with no DST offset.</div>
               </div>
 
               <div class="mb-4">
                 <label class="form-label">Comma-separated <code>fields</code> to request specific API data:</label>
                 <div class="input-group">
                   <span class="input-group-text">?fields=</span>
-                  <input id="fields-input" class="form-control" readonly />
+                  <input id="fields-input" class="form-control" title="This field is Read-Only" readonly />
                 </div>
               </div>
 
-              <div class="d-flex justify-content-center">
-                <button id="fetch-btn" class="btn btn-success btn-lg">Fetch API data</button>
+              <div class="d-flex justify-content-center mb-4">
+                <button id="reset-btn" class="me-3 btn btn-danger btn-lg border border-2 border-dark shadow">Reset Form</button>
+                <button id="fetch-btn" class="btn btn-success btn-lg border border-2 border-dark shadow">Fetch API Data</button>
               </div>
 
-              <div class="d-flex gap-2">
-                <label class="form-label">Examples</label>
-                <button id="example-swatch" class="ms-auto btn btn-sm btn-outline-secondary">Swatch only</button>
+              <br/>
+
+              <div class="py-2 d-flex gap-3 align-items-center justify-content-center">
+                <label class="form-label pt-1">Quick Examples:</label>
+                <button id="example-swatch" class="btn btn-sm btn-outline-secondary">Swatch only</button>
                 <button id="example-whole" class="btn btn-sm btn-outline-secondary">Whole only</button>
                 <button id="example-whole-date" class="btn btn-sm btn-outline-secondary">Whole and Date</button>
               </div>
@@ -138,7 +141,7 @@
       <footer class="text-center text-muted small" style="margin-top: 120px; margin-bottom: 50px;">
         This demo fetches Swatch Time data via API and renders examples.<br/>
         Use this as a starting point for integrating API data into your app.<br/><br/>
-        GitHub: <a href="https://github.com/swatchtime" target="_blank">https://github.com/swatchtime</a>
+        GitHub: <a href="https://github.com/swatchtime/swatch-api-demo" target="_blank">https://github.com/swatchtime/swatch-api-demo</a>
       </footer>
 
     </div>

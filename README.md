@@ -35,22 +35,24 @@ https://github.com/swatchtime
 
 ## API Field Formats (canonical)
 
-The API returns fields following the project's canonical Swatch rules. When consuming the API, expect the following formats:
+ - `swatch`: string — beats with two-decimal centibeat precision (e.g. "123.45").
+ - `whole`: string — floored integer part of beats, zero-padded to 3 digits (e.g. "005", "123").
+ - `rounded`: string — nearest-integer beat, wrapped modulo 1000, zero-padded to 3 digits (e.g. 999.6 -> "000").
+ - `time24` (BMT): string — 24-hour time derived from Biel Mean Time (e.g. "16:50:24").
+ - `time12` (BMT): string — 12-hour time derived from Biel Mean Time (e.g. "04:50:24").
+ - `ampm` (BMT): string — "AM" or "PM" for the `time12` field.
+ - `date` (BMT): string — Biel date in `YYYY-MM-DD` (e.g. "2025-11-27").
+ - `timestamp`: string — ISO-8601 UTC instant (e.g. `2025-11-27T15:50:24.851Z`) — use this for unambiguous UTC comparisons.
 
-- `swatch`: string — Swatch time with two decimal centibeat precision (e.g. `"123.45"`).
-- `whole`: string — integer beat part zero-padded to 3 digits (e.g. `"123"` → `"123"`, `"5"` → `"005"`).
-- `rounded`: string — nearest integer beat, zero-padded to 3 digits and wrapped modulo 1000 (e.g. `999.6` → `"000"`).
-- `time24` / `time12` / `ampm`: human-readable Biel time fields (BMT = UTC+1, fixed, no DST) (24-hour and 12-hour with `AM`/`PM`).
-- `timestamp`: ISO-8601 UTC timestamp (e.g. `2025-11-27T12:34:56.789Z`).
- - `date`: string — Biel date in `YYYY-MM-DD` (e.g. `2025-11-27`). This matches the `time24`/`time12` fields (BMT = UTC+1).
- - `time24` / `time12` / `ampm`: human-readable Biel time fields (BMT = UTC+1, fixed, no DST) (24-hour and 12-hour with `AM`/`PM`).
- - `timestamp`: ISO-8601 UTC timestamp (e.g. `2025-11-27T12:34:56.789Z`).
+#### Implementation notes
 
-Implementation notes:
-
-- The canonical computation uses UTC with a fixed +1 hour offset for Biel (BMT = UTC+1, no DST):
-	- compute seconds since UTC midnight (including milliseconds), add `3600`, wrap modulo `86400`, then divide by `86.4` to get beats.
-- The `swatch` field is formatted to two decimals; consumers should parse it as a number or display as-is.
-- `rounded` is computed by rounding the beat to the nearest integer then applying `% 1000` to ensure wrap behavior.
-
-
+- BMT (Biel Mean Time): the API's human-readable date/time fields (`time24`, `time12`, `ampm`, `date`) are presented in BMT — a canonical fixed offset of UTC+1 with no DST.
+- Canonical computation (how `swatch` is derived):
+	- Compute seconds since UTC midnight including milliseconds.
+	- Add `3600` seconds (fixed offset for BMT) and wrap modulo `86400`.
+	- Divide by `86.4` (seconds per beat) to get beats.
+	- `swatch` is the beats value formatted to two decimals (centibeats).
+	- `whole` is the floored integer part of beats (zero-padded to 3 digits).
+	- `rounded` is the nearest integer of beats, then wrapped modulo 1000 and zero-padded to 3 digits.
+- Prefer `timestamp` when you need UTC or when comparing events across timezones.
+- `date`, `time24`, and `time12` are conveniences derived from the same Biel instant used to compute `swatch`, so they match the beat value.

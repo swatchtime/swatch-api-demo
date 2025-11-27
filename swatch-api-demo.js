@@ -10,6 +10,7 @@
   const exampleWholeDate = $('#example-whole-date');
   const sampleBtn = $('#sample-btn');
   const copyBtn = $('#copy-btn');
+  const resetBtn = $('#reset-btn');
   const fieldsContainer = document.getElementById('fields-checkboxes');
 
   // Utility: get checkbox elements under the container
@@ -77,8 +78,8 @@
     } else {
       for (const k of Object.keys(data)) {
         let label = k;
-        if (k === 'time24' || k === 'time12' || k === 'ampm') label = `${k} (Biel, UTC+1)`;
-        if (k === 'date') label = `${k} (Biel date)`;
+        if (k === 'time24' || k === 'time12' || k === 'ampm') label = `${k} (BMT)`;
+        if (k === 'date') label = `${k} (BMT)`;
         lines.push(`${label}: ${JSON.stringify(data[k])}`);
       }
       if (data.timestamp) {
@@ -125,9 +126,9 @@
       } else if (parsed && (parsed.time12 !== undefined || parsed.ampm !== undefined)) {
         const t12 = parsed.time12 !== undefined ? parsed.time12 : '';
         const am = parsed.ampm ? (' ' + parsed.ampm) : '';
-        if (t12 || am) lastText = `Last updated: ${t12}${am} UTC`;
+        if (t12 || am) lastText = `Last updated: ${t12}${am} BMT`;
       } else if (parsed && parsed.time24 !== undefined) {
-        lastText = `Last updated: ${parsed.time24} UTC`;
+        lastText = `Last updated: ${parsed.time24} BMT`;
       }
       el.textContent = lastText;
     } catch (e) { console.error(e); }
@@ -163,6 +164,26 @@
 
   // Wire main fetch button
   if (fetchBtn) fetchBtn.addEventListener('click', fetchApi);
+
+  // Reset form -> clear all checkboxes and outputs, restore defaults
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      try {
+        // uncheck all checkboxes
+        getCheckboxElements().forEach(cb => cb.checked = false);
+        // clear the fields input and regenerate snippet
+        fieldsInput.value = '';
+        updateSnippetFromSelection();
+        // clear outputs
+        setRaw('');
+        setParsed('');
+        setSnippet('');
+        // reset sample button and last-updated
+        if (sampleBtn) sampleBtn.textContent = 'Swatch Internet Time: @000.00';
+        const lastEl = document.getElementById('lastupdated'); if (lastEl) lastEl.textContent = '';
+      } catch (e) { console.error('Reset failed', e); }
+    });
+  }
 
   // Example buttons
   if (exampleSwatch) exampleSwatch.addEventListener('click', () => {
