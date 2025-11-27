@@ -77,6 +77,7 @@
       for (const k of Object.keys(data)) {
         let label = k;
         if (k === 'time24' || k === 'time12' || k === 'ampm') label = `${k} (Biel, UTC+1)`;
+        if (k === 'date') label = `${k} (Biel date)`;
         lines.push(`${label}: ${JSON.stringify(data[k])}`);
       }
       if (data.timestamp) {
@@ -137,6 +138,7 @@
       if (parsed.swatch !== undefined) { sampleBtn.textContent = `Swatch Internet Time: @${parsed.swatch}`; return; }
       if (parsed.whole !== undefined) { sampleBtn.textContent = `Swatch Internet Time: @${parsed.whole}`; return; }
       if (parsed.rounded !== undefined) { sampleBtn.textContent = `Swatch Internet Time: @${parsed.rounded}`; return; }
+      if (parsed.date !== undefined) { sampleBtn.textContent = `Date: ${parsed.date}`; return; }
     } catch (e) { console.error(e); }
   }
 
