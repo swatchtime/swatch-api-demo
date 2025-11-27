@@ -7,6 +7,7 @@
   const snippet = $('#snippet');
   const exampleSwatch = $('#example-swatch');
   const exampleWhole = $('#example-whole');
+  const exampleWholeDate = $('#example-whole-date');
   const sampleBtn = $('#sample-btn');
   const copyBtn = $('#copy-btn');
   const fieldsContainer = document.getElementById('fields-checkboxes');
@@ -164,13 +165,19 @@
   if (fetchBtn) fetchBtn.addEventListener('click', fetchApi);
 
   // Example buttons
+  if (exampleSwatch) exampleSwatch.addEventListener('click', () => {
+    getCheckboxElements().forEach(i => i.checked = (i.value === 'swatch'));
+    updateFieldsInputFromCheckboxes();
+    fetchApi();
+  });  
   if (exampleWhole) exampleWhole.addEventListener('click', () => {
     getCheckboxElements().forEach(i => i.checked = (i.value === 'whole'));
     updateFieldsInputFromCheckboxes();
     fetchApi();
   });
-  if (exampleSwatch) exampleSwatch.addEventListener('click', () => {
-    getCheckboxElements().forEach(i => i.checked = (i.value === 'swatch'));
+  if (exampleWholeDate) exampleWholeDate.addEventListener('click', () => {
+    const vals = ['whole', 'date'];
+    getCheckboxElements().forEach(i => i.checked = vals.includes(i.value));
     updateFieldsInputFromCheckboxes();
     fetchApi();
   });
