@@ -74,7 +74,11 @@
     if (!data || Object.keys(data).length === 0) {
       lines.push('(empty response)');
     } else {
-      for (const k of Object.keys(data)) lines.push(`${k}: ${JSON.stringify(data[k])}`);
+      for (const k of Object.keys(data)) {
+        let label = k;
+        if (k === 'time24' || k === 'time12' || k === 'ampm') label = `${k} (Biel, UTC+1)`;
+        lines.push(`${label}: ${JSON.stringify(data[k])}`);
+      }
       if (data.timestamp) {
         try {
           const d = new Date(data.timestamp);

@@ -40,7 +40,7 @@ The API returns fields following the project's canonical Swatch rules. When cons
 - `swatch`: string — Swatch time with two decimal centibeat precision (e.g. `"123.45"`).
 - `whole`: string — integer beat part zero-padded to 3 digits (e.g. `"123"` → `"123"`, `"5"` → `"005"`).
 - `rounded`: string — nearest integer beat, zero-padded to 3 digits and wrapped modulo 1000 (e.g. `999.6` → `"000"`).
-- `time24` / `time12` / `ampm`: human-readable UTC time fields (24-hour and 12-hour with `AM`/`PM`).
+- `time24` / `time12` / `ampm`: human-readable Biel time fields (BMT = UTC+1, fixed, no DST) (24-hour and 12-hour with `AM`/`PM`).
 - `timestamp`: ISO-8601 UTC timestamp (e.g. `2025-11-27T12:34:56.789Z`).
 
 Implementation notes:
