@@ -32,3 +32,22 @@ https://github.com/swatchtime
 
 [MIT](LICENSE)
 
+
+## API Field Formats (canonical)
+
+The API returns fields following the project's canonical Swatch rules. When consuming the API, expect the following formats:
+
+- `swatch`: string — Swatch time with two decimal centibeat precision (e.g. `"123.45"`).
+- `whole`: string — integer beat part zero-padded to 3 digits (e.g. `"123"` → `"123"`, `"5"` → `"005"`).
+- `rounded`: string — nearest integer beat, zero-padded to 3 digits and wrapped modulo 1000 (e.g. `999.6` → `"000"`).
+- `time24` / `time12` / `ampm`: human-readable UTC time fields (24-hour and 12-hour with `AM`/`PM`).
+- `timestamp`: ISO-8601 UTC timestamp (e.g. `2025-11-27T12:34:56.789Z`).
+
+Implementation notes:
+
+- The canonical computation uses UTC with a fixed +1 hour offset for Biel (BMT = UTC+1, no DST):
+	- compute seconds since UTC midnight (including milliseconds), add `3600`, wrap modulo `86400`, then divide by `86.4` to get beats.
+- The `swatch` field is formatted to two decimals; consumers should parse it as a number or display as-is.
+- `rounded` is computed by rounding the beat to the nearest integer then applying `% 1000` to ensure wrap behavior.
+
+
