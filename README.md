@@ -42,6 +42,19 @@ https://github.com/swatchtime
  - `time12` (BMT): string — 12-hour time derived from Biel Mean Time (e.g. "04:50:24").
  - `ampm` (BMT): string — "AM" or "PM" for the `time12` field.
  - `date` (BMT): string — Biel date in `YYYY-MM-DD` (e.g. "2025-11-27").
+
+### Note: Rounding and display (important)
+
+When producing the `swatch` field with centibeat precision, implementors must avoid displaying `1000.00`. This can happen if the raw beat (e.g. `999.995`) is rounded to two decimals before wrapping. Use the following safe pattern:
+
+```js
+const rawBeats = bielSeconds / 86.4;
+let rounded = Math.round(rawBeats * 100) / 100;
+if (rounded >= 1000) rounded = rounded - 1000;
+const swatch = rounded.toFixed(2);
+```
+
+This keeps user-friendly rounding and ensures the beat display stays within `0.00`–`999.99`.
  - `timestamp`: string — ISO-8601 UTC instant (e.g. `2025-11-27T15:50:24.851Z`) — use this for unambiguous UTC comparisons.
 
 #### Implementation notes
